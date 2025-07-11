@@ -1,0 +1,9 @@
+% name(Name, DateOfRegistration).
+name(john, '2021-01-15').
+name(mary, '2022-06-30').
+name(sam, '2023-03-10').
+name(alice, '2020-09-25').
+name(mithun, '2024-12-05').
+
+query:
+name(john, DOR).
