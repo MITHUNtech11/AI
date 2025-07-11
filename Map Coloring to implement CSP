@@ -1,0 +1,48 @@
+from itertools import product
+
+colors=['Red','Green','Blue']
+regions=['WA','NT','SA','Q','NSW','V','T']
+neighbors={
+    'WA':['NT','SA'],
+    'NT':['WA','SA','Q'],
+    'SA':['WA','NT','Q','NSW','V'],
+    'Q':['NT','SA','NSW'],
+    'NSW':['Q','SA','V'],
+    'V':['SA','NSW'],
+    'T':[]
+}
+
+def consistent(assign, var, val):
+    return all(assign.get(n)!=val for n in neighbors[var])
+
+def forward_check(domains, var, val):
+    removed=[]
+    for n in neighbors[var]:
+        if val in domains[n]:
+            domains[n].remove(val)
+            removed.append((n,val))
+    return removed
+
+def restore(domains, removed):
+    for v,c in removed:
+        domains[v].add(c)
+
+def backtrack(assign, domains):
+    if len(assign)==len(regions):
+        return assign
+    var=min((r for r in regions if r not in assign), key=lambda v:len(domains[v]))
+    for val in list(domains[var]):
+        if consistent(assign,var,val):
+            assign[var]=val
+            removed=forward_check(domains,var,val)
+            if all(domains[v] for v in regions if v not in assign):
+                result=backtrack(assign,domains)
+                if result:
+                    return result
+            restore(domains,removed)
+            del assign[var]
+    return None
+
+domains={r:set(colors) for r in regions}
+solution=backtrack({},domains)
+print(solution)
