@@ -1,0 +1,42 @@
+male(john).
+male(paul).
+male(michael).
+male(david).
+male(kevin).
+
+female(lisa).
+female(susan).
+female(anna).
+female(kate).
+female(emily).
+
+parent(john, paul).
+parent(john, lisa).
+parent(lisa, michael).
+parent(lisa, anna).
+parent(paul, david).
+parent(susan, david).
+parent(paul, kate).
+parent(susan, kate).
+parent(michael, kevin).
+parent(anna, emily).
+
+father(F, C) :- male(F), parent(F, C).
+mother(M, C) :- female(M), parent(M, C).
+sibling(X, Y) :- parent(P, X), parent(P, Y), X \= Y.
+brother(B, X) :- sibling(B, X), male(B).
+sister(S, X) :- sibling(S, X), female(S).
+grandparent(GP, C) :- parent(GP, P), parent(P, C).
+grandfather(GF, C) :- male(GF), grandparent(GF, C).
+grandmother(GM, C) :- female(GM), grandparent(GM, C).
+ancestor(A, D) :- parent(A, D).
+ancestor(A, D) :- parent(A, X), ancestor(X, D).
+
+
+queries:
+father(F, kate).            % Who is Kate's father?
+mother(M, david).           % Who is David's mother?
+sibling(X, lisa).           % All siblings of Lisa
+brother(B, anna).           % Anna's brothers
+grandmother(GM, kevin).     % Kevin's grandmother
+ancestor(A, emily).         % All ancestors of Emily
