@@ -1,0 +1,24 @@
+known(rain).
+known(cloudy).
+known(cold).
+
+rule(wet_ground, [rain]).
+rule(take_umbrella, [rain, cloudy]).
+rule(stay_home, [rain, cold]).
+rule(wear_jacket, [cold]).
+rule(snow_possible, [cloudy, cold]).
+
+prove(Goal) :-
+    known(Goal).
+
+prove(Goal) :-
+    rule(Goal, Conditions),
+    prove_all(Conditions).
+
+prove_all([]).
+prove_all([H|T]) :-
+    prove(H),
+    prove_all(T).
+
+query:
+?- prove(wet_ground).
