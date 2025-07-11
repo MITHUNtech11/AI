@@ -1,0 +1,16 @@
+match([], []).
+match([X|Ps], [X|Ss]) :- atomic(X), match(Ps, Ss).
+match([Var|Ps], [S|Ss]) :-
+    var(Var),
+    Var = S,
+    match(Ps, Ss).
+match([_|Ps], [_|Ss]) :- match(Ps, Ss).
+
+query:
+match([a, X, c], [a, b, c]).
+
+match([X, Y, Z], [1, 2, 3]).
+
+match([a, _, c], [a, x, c]).
+
+match([a, b], [a, b, c]).
