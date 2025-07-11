@@ -1,0 +1,17 @@
+disease_diabetes.
+disease_bp.
+disease_obesity.
+disease_anemia.
+
+diet(diabetes, 'Low sugar, high fiber, whole grains, vegetables').
+diet(bp, 'Low salt, high potassium, leafy greens, oats').
+diet(obesity, 'Calorie deficit, high protein, no junk food').
+diet(anemia, 'Iron-rich food, leafy greens, red meat, legumes').
+
+suggest_diet(Disease, Diet) :-
+    diet(Disease, Diet).
+
+queries:
+suggest_diet(diabetes, Diet).
+
+suggest_diet(Disease, Diet).
