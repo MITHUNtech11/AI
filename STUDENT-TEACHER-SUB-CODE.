@@ -1,0 +1,28 @@
+student(mithun, cs101).
+student(john, cs101).
+student(anjali, cs102).
+student(ravi, cs103).
+
+teacher(dr_smith, cs101).
+teacher(ms_verma, cs102).
+teacher(mr_rahul, cs103).
+
+subject(cs101, 'Artificial Intelligence').
+subject(cs102, 'Data Structures').
+subject(cs103, 'Machine Learning').
+
+teaches(Teacher, Student) :-
+    student(Student, Code),
+    teacher(Teacher, Code).
+
+student_subject(Student, SubjectName) :-
+    student(Student, Code),
+    subject(Code, SubjectName).
+
+
+query 1:
+teaches(Teacher, mithun).
+query 2:
+student_subject(ravi, Subject).
+query 3:
+teaches(dr_smith, Student).
