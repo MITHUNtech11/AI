@@ -1,0 +1,34 @@
+def alphabeta(node, depth, α, β, maximizing, tree):
+    if depth == 0 or not isinstance(tree[node], list):
+        return tree[node]
+    if maximizing:
+        value = float('-inf')
+        for child in tree[node]:
+            value = max(value, alphabeta(child, depth - 1, α, β, False, tree))
+            α = max(α, value)
+            if α >= β:
+                break
+        return value
+    else:
+        value = float('inf')
+        for child in tree[node]:
+            value = min(value, alphabeta(child, depth - 1, α, β, True, tree))
+            β = min(β, value)
+            if β <= α:
+                break
+        return value
+
+# sample game tree (max at root)
+game_tree = {
+    'A': ['B', 'C', 'D'],
+    'B': ['E', 'F'],
+    'C': ['G', 'H', 'I'],
+    'D': ['J', 'K'],
+    'E': 3, 'F': 12,
+    'G': 8, 'H': 2, 'I': 4,
+    'J': 6, 'K': 14
+}
+
+best_value = alphabeta('A', depth=3, α=float('-inf'), β=float('inf'),
+                       maximizing=True, tree=game_tree)
+print("Optimal value for the maximizer:", best_value)
