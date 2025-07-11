@@ -1,0 +1,43 @@
+from collections import deque
+
+def valid(m_left,c_left):
+    m_right,c_right=3-m_left,3-c_left
+    return (m_left==0 or m_left>=c_left) and (m_right==0 or m_right>=c_right)
+
+def next_states(state):
+    m_left,c_left,boat=state
+    moves=[(1,0),(2,0),(0,1),(0,2),(1,1)]
+    for dm,dc in moves:
+        if boat==0:
+            nm, nc = m_left-dm, c_left-dc
+            nb=1
+        else:
+            nm, nc = m_left+dm, c_left+dc
+            nb=0
+        if 0<=nm<=3 and 0<=nc<=3 and valid(nm,nc):
+            yield (nm,nc,nb)
+
+def bfs():
+    start=(3,3,0)
+    goal=(0,0,1)
+    q=deque([start])
+    parent={start:None}
+    while q:
+        s=q.popleft()
+        if s==goal:
+            path=[]
+            while s:
+                path.append(s)
+                s=parent[s]
+            return path[::-1]
+        for n in next_states(s):
+            if n not in parent:
+                parent[n]=s
+                q.append(n)
+
+path=bfs()
+for step in path:
+    ml,cl,b=step
+    mr,cr=3-ml,3-cl
+    side="left" if b==0 else "right"
+    print(f"L:{ml}M {cl}C | R:{mr}M {cr}C   Boat on {side}")
