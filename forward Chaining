@@ -1,0 +1,45 @@
+:- dynamic known/1.
+
+fact(rain).
+fact(cloudy).
+fact(cold).
+
+rule(wet_ground, [rain]).
+rule(take_umbrella, [rain, cloudy]).
+rule(stay_home, [rain, cold]).
+rule(wear_jacket, [cold]).
+rule(snow_possible, [cloudy, cold]).
+
+infer(Fact) :-
+    known(Fact).
+
+infer(Fact) :-
+    rule(Fact, Conditions),
+    check_all(Conditions),
+    \+ known(Fact),
+    assertz(known(Fact)),
+    write('Inferred: '), write(Fact), nl.
+
+check_all([]).
+check_all([H|T]) :-
+    (known(H); infer(H)),
+    check_all(T).
+
+run_forward :-
+    retractall(known(_)),
+    findall(F, fact(F), Facts),
+    maplist(assertz_known, Facts),
+    forward_loop.
+
+assertz_known(F) :- assertz(known(F)).
+
+forward_loop :-
+    (infer(NewFact), fail ; true).
+
+show_known :-
+    write('Known facts after inference:'), nl,
+    known(F), write('- '), write(F), nl, fail.
+show_known.
+
+query:
+?- run_forward.
