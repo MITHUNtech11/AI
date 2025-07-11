@@ -1,0 +1,44 @@
+symptom(fever).
+symptom(cough).
+symptom(headache).
+symptom(fatigue).
+symptom(rash).
+symptom(sore_throat).
+symptom(runny_nose).
+symptom(body_ache).
+
+disease(flu) :- 
+    has_symptom(fever),
+    has_symptom(cough),
+    has_symptom(body_ache),
+    has_symptom(fatigue).
+
+disease(common_cold) :-
+    has_symptom(runny_nose),
+    has_symptom(cough),
+    has_symptom(sore_throat).
+
+disease(measles) :-
+    has_symptom(fever),
+    has_symptom(rash),
+    has_symptom(cough).
+
+disease(covid19) :-
+    has_symptom(fever),
+    has_symptom(cough),
+    has_symptom(fatigue),
+    has_symptom(headache).
+
+disease(dengue) :-
+    has_symptom(fever),
+    has_symptom(headache),
+    has_symptom(rash),
+    has_symptom(body_ache).
+
+
+query:
+?- assert(has_symptom(fever)).
+?- assert(has_symptom(cough)).
+?- assert(has_symptom(fatigue)).
+?- assert(has_symptom(headache)).
+?- disease(D).
