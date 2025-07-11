@@ -1,0 +1,39 @@
+import random, time
+
+class VacuumEnv:
+    def __init__(self, left, right, loc):
+        self.state = {"A": left, "B": right}
+        self.loc = loc
+    def percept(self):
+        return self.loc, self.state[self.loc]
+    def execute(self, action):
+        if action == "SUCK":
+            self.state[self.loc] = "CLEAN"
+        elif action == "LEFT":
+            self.loc = "A"
+        elif action == "RIGHT":
+            self.loc = "B"
+    def is_done(self):
+        return all(s == "CLEAN" for s in self.state.values())
+
+def reflex_agent(loc, status):
+    if status == "DIRTY":
+        return "SUCK"
+    return "RIGHT" if loc == "A" else "LEFT"
+
+def run(env):
+    step = 0
+    while not env.is_done():
+        loc, status = env.percept()
+        action = reflex_agent(loc, status)
+        print(f"Step {step}: Loc={loc} Status={status} Action={action}")
+        env.execute(action)
+        step += 1
+    print(f"Finished in {step} steps: {env.state}")
+
+random.seed(42)
+initial_left = random.choice(["DIRTY","CLEAN"])
+initial_right = random.choice(["DIRTY","CLEAN"])
+initial_loc = random.choice(["A","B"])
+env = VacuumEnv(initial_left, initial_right, initial_loc)
+run(env)
