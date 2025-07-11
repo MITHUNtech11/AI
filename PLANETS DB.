@@ -1,0 +1,29 @@
+planet(mercury, 0.39, 0.06, no).
+planet(venus, 0.72, 0.82, no).
+planet(earth, 1.00, 1.00, yes).
+planet(mars, 1.52, 0.11, no).
+planet(jupiter, 5.20, 317.8, no).
+planet(saturn, 9.58, 95.2, no).
+planet(uranus, 19.20, 14.5, no).
+planet(neptune, 30.05, 17.1, no).
+
+habitable(Name) :-
+    planet(Name, _, _, yes).
+
+larger_than(Name1, Name2) :-
+    planet(Name1, _, Mass1, _),
+    planet(Name2, _, Mass2, _),
+    Mass1 > Mass2.
+
+closer_than(Name1, Name2) :-
+    planet(Name1, Dist1, _, _),
+    planet(Name2, Dist2, _, _),
+    Dist1 < Dist2.
+
+query:
+
+habitable(Planet).
+
+larger_than(Planet, earth).
+
+closer_than(Planet, mars).
