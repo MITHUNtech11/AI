@@ -1,0 +1,17 @@
+% state(MonkeyPos, BoxPos, OnBox?, HasBanana?)
+goal(state(_, _, _, yes)).
+
+move(state(Pos, Pos, no, no), climb, state(Pos, Pos, yes, no)).
+move(state(Pos, Pos, yes, no), grab,  state(Pos, Pos, yes, yes)).
+move(state(from, Box, no, H), walk(from, to), state(to, Box, no, H)) :- member(from-[to], [a-[b,c],b-[a,c],c-[a,b]]).
+move(state(M, from, no, H), push(from,to), state(to, to, no, H))     :- member(from-[to], [a-[b,c],b-[a,c],c-[a,b]]).
+
+path(S, [ ], S).
+path(S, [Act|Rest], G) :- move(S, Act, S1), path(S1, Rest, G).
+
+solve(Path) :-
+  path(state(a, b, no, no), Path, G),
+  goal(G).
+
+queries:
+?- solve(Path).
