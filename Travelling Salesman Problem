@@ -1,0 +1,34 @@
+import itertools
+
+def tsp(dist):
+    n=len(dist)
+    C={(1<<i,i):dist[0][i] for i in range(1,n)}
+    for r in range(2,n):
+        for S in (tuple(sorted(s)) for s in itertools.combinations(range(1,n),r)):
+            bits=sum(1<<i for i in S)
+            for k in S:
+                prev=bits^(1<<k)
+                C[(bits,k)]=min(C[(prev,m)]+dist[m][k] for m in S if m!=k)
+    bits=(1<<n)-2
+    cost,min_last=min((C[(bits,k)]+dist[k][0],k) for k in range(1,n))
+    path=[0,min_last]
+    mask=bits
+    while mask:
+        prev_mask=mask^(1<<path[-1])
+        next_city=min((m for m in range(1,n) if mask&(1<<m) and m!=path[-1]),
+                      key=lambda m:C[(prev_mask,m)]+dist[m][path[-1]])
+        path.append(next_city)
+        mask^=1<<next_city
+    path.append(0)
+    return cost,path[::-1]
+
+dist_matrix=[
+    [0,29,20,21],
+    [29,0,15,17],
+    [20,15,0,28],
+    [21,17,28,0]
+]
+
+length,route=tsp(dist_matrix)
+print("Optimal tour length:",length)
+print("Route:",route)
