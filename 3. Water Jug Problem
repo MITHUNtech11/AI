@@ -1,0 +1,49 @@
+from collections import deque
+
+def is_goal(state, target):
+    return target in state
+
+def get_next_states(state, a_cap, b_cap):
+    a, b = state
+    return {
+        (a_cap, b),          
+        (a, b_cap),          
+        (0, b),              
+        (a, 0),              
+        (min(a + b, a_cap), max(0, b - (a_cap - a))),  
+        (max(0, a - (b_cap - b)), min(a + b, b_cap))   
+    }
+
+def water_jug_bfs(a_cap, b_cap, target):
+    visited = set()
+    queue = deque()
+    queue.append((0, 0))
+    parent = {(0, 0): None}
+
+    while queue:
+        state = queue.popleft()
+        if is_goal(state, target):
+            path = []
+            while state:
+                path.append(state)
+                state = parent[state]
+            path.reverse()
+            return path
+        for next_state in get_next_states(state, a_cap, b_cap):
+            if next_state not in visited:
+                visited.add(next_state)
+                parent[next_state] = state
+                queue.append(next_state)
+    return None
+
+a_capacity = 4
+b_capacity = 3
+target = 2
+
+solution = water_jug_bfs(a_capacity, b_capacity, target)
+if solution:
+    print("Steps to reach the target:")
+    for step in solution:
+        print(step)
+else:
+    print("No solution found.")
