@@ -1,0 +1,68 @@
+import math, random
+
+def print_board(b):
+    symbols={None:' ', 'X':'X', 'O':'O'}
+    rows=[" | ".join(symbols[b[i+j]] for j in range(3)) for i in (0,3,6)]
+    print("\n---------\n".join(rows))
+
+def winner(b):
+    lines=[(0,1,2),(3,4,5),(6,7,8),
+           (0,3,6),(1,4,7),(2,5,8),
+           (0,4,8),(2,4,6)]
+    for a,b1,c in lines:
+        if board[a] and board[a]==board[b1]==board[c]: 
+            return board[a]
+    return None
+
+def minimax(b, depth, is_max, alpha, beta):
+    w=winner(b)
+    if w=='X': return 10-depth
+    if w=='O': return depth-10
+    if None not in b: return 0
+    if is_max:
+        best=-math.inf
+        for i in range(9):
+            if b[i] is None:
+                b[i]='X'
+                best=max(best,minimax(b,depth+1,False,alpha,beta))
+                b[i]=None
+                alpha=max(alpha,best)
+                if beta<=alpha: break
+        return best
+    else:
+        best=math.inf
+        for i in range(9):
+            if b[i] is None:
+                b[i]='O'
+                best=min(best,minimax(b,depth+1,True,alpha,beta))
+                b[i]=None
+                beta=min(beta,best)
+                if beta<=alpha: break
+        return best
+
+def best_move(b):
+    moves=[i for i,v in enumerate(b) if v is None]
+    best_score=-math.inf
+    move=random.choice(moves)
+    for m in moves:
+        b[m]='X'
+        score=minimax(b,0,False,-math.inf,math.inf)
+        b[m]=None
+        if score>best_score:
+            best_score,move=score,m
+    return move
+
+board=[None]*9
+print("You are O. Enter positions 1‑9.")
+while True:
+    print_board(board)
+    if winner(board) or None not in board: break
+    pos=int(input("Your move: "))-1
+    if pos not in range(9) or board[pos] is not None:
+        print("Invalid."); continue
+    board[pos]='O'
+    if winner(board) or None not in board: break
+    board[best_move(board)]='X'
+w=winner(board)
+print_board(board)
+print("Result:", "Draw" if w is None else f"{w} wins")
