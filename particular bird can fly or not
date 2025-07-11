@@ -1,0 +1,18 @@
+bird(sparrow).
+bird(pigeon).
+bird(penguin).
+bird(ostrich).
+bird(parrot).
+bird(duck).
+
+cannot_fly(penguin).
+cannot_fly(ostrich).
+
+can_fly(X) :-
+    bird(X),
+    \+ cannot_fly(X).
+
+query:
+can_fly(sparrow).
+
+can_fly(Bird).
